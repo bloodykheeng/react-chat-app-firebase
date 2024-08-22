@@ -1,24 +1,37 @@
-import { doc, onSnapshot } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
-import { ChatContext } from "../context/ChatContext";
-import { db } from "../firebase";
+
 import Message from "./Message";
 
 const Messages = () => {
-  const [messages, setMessages] = useState([]);
-  const { data } = useContext(ChatContext);
+  const sampleMessages = [
+    {
+      id: "1",
+      senderId: "user_1",
+      text: "Hey, how's it going?",
+      img: null // No image for this message
+    },
+    {
+      id: "2",
+      text: "I'm doing well, thanks! How about you?",
+      senderId: "67890", // Other user's ID
+      img: null
+    },
+    {
+      id: "3",
+      text: "Here's a picture from my trip.",
+      senderId: "12345", // Current user's ID
+      img: "https://example.com/trip.jpg" // Sample image URL
+    },
+    {
+      id: "4",
+      text: "Wow, that looks amazing!",
+      senderId: "67890",
+      img: null
+    }
+  ];
+  const [messages, setMessages] = useState(sampleMessages);
 
-  useEffect(() => {
-    const unSub = onSnapshot(doc(db, "chats", data.chatId), (doc) => {
-      doc.exists() && setMessages(doc.data().messages);
-    });
-
-    return () => {
-      unSub();
-    };
-  }, [data.chatId]);
-
-  console.log(messages)
+  console.log(messages);
 
   return (
     <div className="messages">
